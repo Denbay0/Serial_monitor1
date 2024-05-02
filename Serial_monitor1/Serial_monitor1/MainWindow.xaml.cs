@@ -42,13 +42,19 @@ namespace ArduinoDataReceiver
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            receivedData += serialPort.ReadExisting();
+            string rawData = serialPort.ReadLine(); // Чтение строки данных
+
+            // Выводим полученные данные в консоль для отладки
+            Console.WriteLine("Полученные данные: " + rawData);
 
             // Обновляем интерфейс в основном потоке
             Dispatcher.Invoke(() =>
             {
-                txtReceivedData.Text = receivedData;
-                txtReceivedData.ScrollToEnd(); // Прокрутка к новым данным
+                // Сконкатенируем новые данные с уже существующим текстом
+                txtReceivedData.Text += rawData + Environment.NewLine;
+
+                // Прокручиваем текстовое поле к новым данным
+                txtReceivedData.ScrollToEnd();
             });
         }
 
@@ -83,6 +89,11 @@ namespace ArduinoDataReceiver
             });
         }
 
+        private void UpdateReceivedData(string data)
+        {
+            receivedData += data + Environment.NewLine;
+        }
+
         private void Calibrate_Click(object sender, RoutedEventArgs e)
         {
             SendCalibrationCommand();
@@ -110,4 +121,23 @@ namespace ArduinoDataReceiver
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
